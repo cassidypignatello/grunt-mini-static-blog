@@ -30,20 +30,30 @@ module.exports = function(grunt) {
 
     // Configuration to be run (and then tested).
     mini_static_blog: {
-      default_options: {
+      default: {
         options: {
-        },
-        files: {
-          'tmp/default_options': ['test/fixtures/testing', 'test/fixtures/123']
-        }
-      },
-      custom_options: {
-        options: {
-          separator: ': ',
-          punctuation: ' !!!'
-        },
-        files: {
-          'tmp/custom_options': ['test/fixtures/testing', 'test/fixtures/123']
+          data: {
+            author: "My Name",
+            url: "http://www.example.com",
+            disqus: "",
+            title: "My blog",
+            description: "A blog"
+          },
+          template: {
+            post: 'templates/post.hbs',
+            page: 'templates/page.hbs',
+            index: 'templates/index.hbs',
+            header: 'templates/partials/header.hbs',
+            footer: 'templates/partials/footer.hbs',
+            notfound: 'templates/404.hbs'
+          },
+          src: {
+            posts: 'content/posts/',
+            pages: 'content/pages/'
+          },
+          www: {
+            dest: 'build'
+          }
         }
       }
     },
