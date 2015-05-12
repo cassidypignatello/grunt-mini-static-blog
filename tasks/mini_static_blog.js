@@ -31,7 +31,13 @@ module.exports = function(grunt) {
       year: new Date().getFullYear(),
       size: 5
     });
-    options.domain = parseUrl.parse(options.data.url).hostname; 
+    options.domain = parseUrl.parse(options.data.url).hostname;
+
+    // Register partials
+    Handlebars.registerPartial({
+      header: grunt.file.read(options.template.header),
+      footer: grunt.file.read(options.template.footer)
+    }); 
 
     /* Merge task-specific and/or target-specific options with these defaults.
     var options = this.options({
