@@ -37,7 +37,26 @@ module.exports = function(grunt) {
     Handlebars.registerPartial({
       header: grunt.file.read(options.template.header),
       footer: grunt.file.read(options.template.footer)
-    }); 
+    });
+
+    // Get languages
+    var langs = htljs.listLanguages();
+
+    // Get Marked Metadata
+    MarkedMetadata.setOptions({
+      gfm: true,
+      tables: true,
+      smartLists: true,
+      smartypants: true,
+      langPrefix: 'hljs lang-',
+      highlight: function (code, lang) {
+        if (typeof lang !== "undefined" && langs.indexOf(lang) > 0) {
+          return hljs.highlight(lang, code).value;
+        } else {
+          return hljs.highlightAuto(code).value;
+        }
+      }
+    });
 
     /* Merge task-specific and/or target-specific options with these defaults.
     var options = this.options({
