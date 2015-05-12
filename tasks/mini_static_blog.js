@@ -58,6 +58,10 @@ module.exports = function(grunt) {
       }
     });
 
+    // Get matching files
+    var posts = grunt.file.expand(options.src.posts + '*.md', options.src.posts + '*.markdown');
+    var pages = grunt.file.expand(options.src.pages + '*.md', options.src.pages + '*.markdown');
+
     /* Merge task-specific and/or target-specific options with these defaults.
     var options = this.options({
       punctuation: '.',
