@@ -14,11 +14,30 @@ module.exports = function(grunt) {
   // creation: http://gruntjs.com/creating-tasks
 
   grunt.registerMultiTask('mini_static_blog', 'The best Grunt plugin ever.', function() {
-    // Merge task-specific and/or target-specific options with these defaults.
+    // Import external libraries
+    var Handlebars = require('handlebars'),
+      Moment = require('moment'),
+      RSS = require('rss'),
+      hljs = require('highlight.js'),
+      MarkedMetadata = require('meta-marked'),
+      _ = require('lodash'),
+      parseUrl = require('url');
+
+    // Declare variables
+    var output, path;
+
+    // Import options
+    var options = this.options({
+      year: new Date().getFullYear(),
+      size: 5
+    });
+    options.domain = parseUrl.parse(options.data.url).hostname; 
+
+    /* Merge task-specific and/or target-specific options with these defaults.
     var options = this.options({
       punctuation: '.',
       separator: ', '
-    });
+    }); */
 
     // Iterate over all specified file groups.
     this.files.forEach(function(f) {
