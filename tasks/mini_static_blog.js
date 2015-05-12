@@ -62,6 +62,12 @@ module.exports = function(grunt) {
     var posts = grunt.file.expand(options.src.posts + '*.md', options.src.posts + '*.markdown');
     var pages = grunt.file.expand(options.src.pages + '*.md', options.src.pages + '*.markdown');
 
+    // Get Handlebars templates
+    var postTemplate = Handlebars.compile(grunt.file.read(options.template.post));
+    var pageTemplate = Handlebars.compile(grunt.file.read(options.template.page));
+    var indexTemplate = Handlebars.compile(grunt.file.read(options.template.index));
+    var notFoundTemplate = Handlebars.compile(grunt.file.read(options.template.notfound));
+
     /* Merge task-specific and/or target-specific options with these defaults.
     var options = this.options({
       punctuation: '.',
