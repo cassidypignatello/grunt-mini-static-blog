@@ -68,6 +68,68 @@ module.exports = function(grunt) {
     var indexTemplate = Handlebars.compile(grunt.file.read(options.template.index));
     var notFoundTemplate = Handlebars.compile(grunt.file.read(options.template.notfound));
 
+    // Generate posts
+    var post_items = [];
+    posts.forEach(function(file) {
+      // Convert it to Markdown
+      var content = grunt.file.read(file);
+      var md = new MarkedMetadata(content);
+      var mdcontent = md.html;
+      var meta = md.meta;
+
+      // Get path
+      var permalink = '/blog/' + (file.replace(options.src.posts, '').replace(/(\d{4})-(\d{2})-(\d{2})-/, '$1/$2/$3').replace('.markdown', '').replace('.md', ''));
+      var path = options.www.dest + permalink;
+
+      // Render the Handlebars template with the content
+      var data = {
+        year: options.year,
+        data: options.data,
+        domain: options.domain,
+        path: permalink + '/',
+        meta: {
+          title: meta.title.replace(/"/g, ''),
+          date: meta.date,
+          formattedDate: new Moment(new Date(meta.date)).format('Do MMMM YYYY h:mm a')
+          categories: meta.categories
+        },
+        post: {
+          content: mdcontent,
+          rawcontent: content
+        }
+      };
+      post_items.push(data);
+    });
+
+    // Sort posts
+    post_items = _.sortBy(post_items, function(item) {
+      return item.meta.date;
+    });
+
+    // Get recent posts
+    var recent_posts = post_items.slice(Math.max(post_items.length - 5, 1)).reverse();
+
+    // Output them
+    post_items.forEach(function(data, index, list) {
+      // Get next and previous
+      if (index < (list.length - 1)) {
+        data.next = {
+          title: list[index + 1].meta.title,
+          path: list[index + 1].path
+        };
+      }
+
+      // Get recent posts
+      data.recent_posts = recent_posts;
+
+      // Render template
+      var output = postTemplate(data);
+
+      // Write post to destination
+      grunt.file.mkdir(options.www.dest + data.path);
+      grunt.file.write(options.www.dest + data.path + '/index.html', output);
+    });
+
     /* Merge task-specific and/or target-specific options with these defaults.
     var options = this.options({
       punctuation: '.',
