@@ -40,7 +40,7 @@ module.exports = function(grunt) {
     });
 
     // Get languages
-    var langs = htljs.listLanguages();
+    var langs = hljs.listLanguages();
 
     // Get Marked Metadata
     MarkedMetadata.setOptions({
@@ -90,7 +90,7 @@ module.exports = function(grunt) {
         meta: {
           title: meta.title.replace(/"/g, ''),
           date: meta.date,
-          formattedDate: new Moment(new Date(meta.date)).format('Do MMMM YYYY h:mm a')
+          formattedDate: new Moment(new Date(meta.date)).format('Do MMMM YYYY h:mm a'),
           categories: meta.categories
         },
         post: {
@@ -162,5 +162,4 @@ module.exports = function(grunt) {
       grunt.log.writeln('File "' + f.dest + '" created.');
     });
   });
-
 };
